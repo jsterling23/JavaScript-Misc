@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Game</title>
+    <style>
+        canvas { border: 1px solid black }
+    </style>
+
+    <script type="text/javascript">
+        // function draw() {
+        //     var ctx = document.getElementById('win').getContext('2d');
+
+        //     ctx.fillRect(0, 0, 150, 150);   // Draw a rectangle with default settings
+        //     ctx.save();                  // Save the default state
+            
+        //     ctx.fillStyle = '#09F';      // Make changes to the settings
+        //     ctx.fillRect(15, 15, 120, 120); // Draw a rectangle with new settings
+
+        //     ctx.save();                  // Save the current state
+        //     ctx.fillStyle = '#FFF';      // Make changes to the settings
+        //     ctx.globalAlpha = 0.5; 
+        //     ctx.fillRect(30, 30, 90, 90);   // Draw a rectangle with new settings
+
+        //     ctx.restore();               // Restore previous state
+        //     ctx.fillRect(45, 45, 60, 60);   // Draw a rectangle with restored settings
+
+        //     ctx.restore();               // Restore original state
+        //     ctx.fillRect(60, 60, 30, 30);   // Draw a rectangle with restored settings
+        // }
+
+
+            function draw() {
+                var ctx = document.getElementById('win').getContext('2d');
+                ctx.fillRect(0, 0, 300, 300);
+                ctx.translate(150, 150);
+
+                // Create a circular clipping path
+                ctx.beginPath();
+                ctx.arc(0, 0, 80, 0, Math.PI * 2, true);
+                ctx.clip();
+
+                // draw background
+                var lingrad = ctx.createLinearGradient(0, -300, 0, 300);
+                lingrad.addColorStop(0, '#232256');
+                lingrad.addColorStop(1, '#143778');
+                
+                ctx.fillStyle = lingrad;
+                ctx.fillRect(-75, -75, 300, 300);
+
+                // draw stars
+                for (var j = 1; j < 500; j++) {
+                    ctx.save();
+                    ctx.fillStyle = '#fff';
+                    ctx.translate(75 - Math.floor(Math.random() * 300),
+                                75 - Math.floor(Math.random() * 300));
+                    drawStar(ctx, Math.floor(Math.random() * 4) + 2);
+                    ctx.restore();
+                }
+                
+                }
+
+                function drawStar(ctx, r) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(r, 0);
+                for (var i = 0; i < 9; i++) {
+                    ctx.rotate(Math.PI / 5);
+                    if (i % 2 === 0) {
+                    ctx.lineTo((r / 0.525731) * 0.200811, 0);
+                    } else {
+                    ctx.lineTo(r, 0);
+                    }
+                }
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+                }
+    </script>
+</head>
+<body onload="draw()">
+    
+    <canvas id="win" width="300" height="300"></canvas>
+
+</body>
+</html>
