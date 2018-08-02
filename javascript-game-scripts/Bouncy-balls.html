@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>From Scratch Javascript</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+    <script type="text/Javascript">
+
+        
+
+        function start(){
+            var canvas = document.getElementById('win');
+            var ctx = canvas.getContext('2d');
+            var counter = 0;
+            var colors = ['green','blue','red','yellow','pink','teal','orange'];
+            var raf;
+
+            
+            class Ball {
+                constructor(x, y, vx, vy, radius, color){
+                    this.x = x;
+                    this.y = y;
+                    this.vx = vx;
+                    this.vy = vy;
+                    this.radius = radius;
+                    this.color = color;
+                };
+                get info() {
+                    return this.x;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+                    ctx.closePath();
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                };
+            };
+            
+            var green_ball = new Ball(130, 30, 6, 13, 25, colors[0]);
+            var blue_ball = new Ball(30, 60, -13, 8, 25, colors[1]);
+            var red_ball = new Ball(200, 110, 5, 17, 25, colors[2]);
+            var yellow_ball = new Ball(250, 200, 5, 17, 25, colors[3]);
+            var pink_ball = new Ball(450, 190, 5, 17, 25, colors[4]);
+            var teal_ball = new Ball(340, 275, -5, 17, 25, colors[5]);
+            var orange_ball = new Ball(190, 190, 5, -17, 25, colors[6]);
+            var balls = [green_ball, blue_ball, red_ball, yellow_ball, pink_ball, teal_ball, orange_ball];
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for(let i = 0; i < balls.length; i++){
+                    // var ball = balls[i];
+                    balls[i].draw();
+                    balls[i].x += balls[i].vx;
+                    balls[i].y += balls[i].vy;
+                    
+                    if (balls[i].x + balls[i].vx > canvas.width - 25 || balls[i].x + balls[i].vx < 25) {
+                        var number = Math.floor(Math.random() * 8)
+                        balls[i].color = colors[number]
+                        balls[i].vx = -balls[i].vx;
+                    }
+                    if (balls[i].y + balls[i].vy > canvas.height - 25 || balls[i].y + balls[i].vy < 25) {
+                        var number = Math.floor(Math.random() * 8)
+                        balls[i].color = colors[number]
+                        balls[i].vy = -balls[i].vy;
+                    }
+                    
+                };
+
+                var raf = window.requestAnimationFrame(draw);
+            }
+            
+            canvas.addEventListener('click', function(){
+                raf = window.requestAnimationFrame(draw);
+            });
+
+            canvas.addEventListener('mouseout', function(){
+                window.cancelAnimationFrame(raf);
+            });
+
+            for(let i = 0; i < balls.length; i++){
+                var ball = balls[i];
+                ball.draw();
+            };
+        }
+    </script>
+</head>
+<body onload="start()">
+    
+    <canvas id="win" width="600" height="300"></canvas>   
+    
+</body>
+</html>
+
